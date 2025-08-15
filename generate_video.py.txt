@@ -1,0 +1,40 @@
+# generate_video.py
+
+import os
+import subprocess
+
+def generate_video(input_image, output_video, workflow_path):
+    """
+    Generates a video from a still image using ComfyUI workflow.
+    
+    Parameters:
+    - input_image: Path to the input image file
+    - output_video: Desired output video filename
+    - workflow_path: Path to the ComfyUI workflow JSON
+    """
+    if not os.path.exists(input_image):
+        raise FileNotFoundError(f"Input image not found: {input_image}")
+    
+    if not os.path.exists(workflow_path):
+        raise FileNotFoundError(f"Workflow file not found: {workflow_path}")
+    
+    command = [
+        "python", "main.py",
+        "--input", input_image,
+        "--workflow", workflow_path,
+        "--output", output_video
+    ]
+    
+    try:
+        subprocess.run(command, check=True)
+        print(f"✅ Video generated successfully: {output_video}")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error generating video: {e}")
+
+# Example usage
+if __name__ == "__main__":
+    generate_video(
+        input_image="assets/sample.jpg",
+        output_video="outputs/jahblessings.mp4",
+        workflow_path="workflows/jahblessings_workflow.json"
+    )
